@@ -54,7 +54,7 @@ public class WebCrawler {
 
     public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
 
-        BufferedReader br = new BufferedReader(new FileReader("../../logs/seed.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("../../logs/config.txt"));
 
         String[] arguments = new String[5];
 
@@ -131,6 +131,8 @@ public class WebCrawler {
         
         
     }
+
+    
     public static void inspectAllLinks(Document doc)
     {
         
