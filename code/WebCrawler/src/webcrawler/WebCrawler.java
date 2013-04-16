@@ -1,8 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package webcrawler;
+
+//package webcrawler;
+
+import java.io.*;
+import java.util.*;
+import java.lang.*;
+
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,33 +34,40 @@ import org.jsoup.select.Elements;
  *
  * @author NEO
  */
+
 public class WebCrawler {
 
-    /**
-     * @param args the command line arguments
-     */
     static List<String> listOfLinks;
     static List<String> listOfKeywords;
     static String savePath;
     static String query;
     static Date date;
     static int maxTrials = 3;
-    /*Takes the input file name cotaining the keywords and number of days to check and the date as args
+
+    /*Takes the input file name cotaining the keywords and number of days to check and the date as from config.txt
      * args[0] = keyword file name
      * args[1] = year
      * args[2] = month
      * args[3] = day
      * args[4] = Num of days before and after the given date
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+
+    public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
+
+        BufferedReader br = new BufferedReader(new FileReader("../../logs/seed.txt"));
+
+        String[] arguments = new String[5];
+
+        for(int i = 0; i < 5; i++)
+            arguments[i] = br.readLine();
+    
         listOfLinks = new ArrayList<String>();
         listOfKeywords = new ArrayList<String>();
-        String keywordFile = args[0];
-        int year = Integer.parseInt(args[1]);
-        int month = Integer.parseInt(args[2]);
-        int day = Integer.parseInt(args[3]);
-        int count = Integer.parseInt(args[4]);
+        String keywordFile = arguments[0];
+        int year = Integer.parseInt(arguments[1]);
+        int month = Integer.parseInt(arguments[2]);
+        int day = Integer.parseInt(arguments[3]);
+        int count = Integer.parseInt(arguments[4]);
         //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
@@ -66,7 +75,7 @@ public class WebCrawler {
         
         try 
         {
-            BufferedReader bufferRead = new BufferedReader(new FileReader(keywordFile));
+            BufferedReader bufferRead = new BufferedReader(new FileReader("../../logs/"+keywordFile));
             String read = bufferRead.readLine();
             while(read!=null)
             {
@@ -88,8 +97,10 @@ public class WebCrawler {
             day = cal.get(Calendar.DATE);
             query = "http://www.hindu.com/thehindu/%04d/%02d/%02d/";
             query = String.format(query,year,month,day);
-            savePath = String.format("c:\\NLP\\%04d-%02d-%02d", year, month, day);
+            savePath = String.format("..\\..\\files\\%04d-%02d-%02d", year, month, day);
             
+            System.out.println(String.format("Looking into : /%04d/%02d/%02d/",year,month,day));
+
             //Document page = agent.get(query);
             Document doc = null;
             doc = getPage(doc, query);
@@ -186,7 +197,9 @@ public class WebCrawler {
         {
             try 
             {
+
                 doc = Jsoup.connect(webQuery).get();
+
                 if(doc!=null)
                     break;
                 else
