@@ -1,10 +1,6 @@
 
 //package webcrawler;
 
-import java.io.*;
-import java.util.*;
-import java.lang.*;
-
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -124,6 +120,7 @@ public class WebCrawler {
             
             cal.add(Calendar.DAY_OF_MONTH, 1);
         }
+
         for(String link:listOfLinks)
         {
             System.out.println(link);
@@ -132,7 +129,7 @@ public class WebCrawler {
         
     }
 
-    
+
     public static void inspectAllLinks(Document doc)
     {
         
