@@ -33,22 +33,14 @@ import org.jsoup.select.Elements;
 
 public class WebCrawler {
 
-    static List<String> listOfLinks;
-    static List<String> listOfKeywords;
-    static String savePath;
-    static String query;
-    static Date date;
-    static int maxTrials = 3;
+    List<String> listOfLinks;
+    List<String> listOfKeywords;
+    String savePath;
+    String query;
+    Date date;
+    int maxTrials = 3; 
 
-    /*Takes the input file name cotaining the keywords and number of days to check and the date as from config.txt
-     * args[0] = keyword file name
-     * args[1] = year
-     * args[2] = month
-     * args[3] = day
-     * args[4] = Num of days before and after the given date
-     */
-
-    public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
+    WebCrawler() throws FileNotFoundException, IOException, Exception {
 
         BufferedReader br = new BufferedReader(new FileReader("../../logs/config.txt"));
 
@@ -67,7 +59,7 @@ public class WebCrawler {
         //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
-        cal.add(Calendar.DAY_OF_MONTH, -count);
+        // cal.add(Calendar.DAY_OF_MONTH, -count);
         
         try 
         {
@@ -86,8 +78,12 @@ public class WebCrawler {
         } catch (IOException ex) {
             Logger.getLogger(WebCrawler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for(int i=0; i<2*count; i++)
-        {
+
+        int numberArticles = 0;
+
+        for(int i=0; i<count; i++)
+        {   
+
             year = cal.get(Calendar.YEAR);
             month = cal.get(Calendar.MONTH);
             day = cal.get(Calendar.DATE);
@@ -95,7 +91,7 @@ public class WebCrawler {
             query = String.format(query,year,month,day);
             savePath = String.format("..\\..\\files\\%04d-%02d-%02d", year, month, day);
             
-            System.out.println(String.format("Looking into : /%04d/%02d/%02d/",year,month,day));
+            System.out.print(String.format("Looking into : /%04d/%02d/%02d/",year,month,day));
 
             //Document page = agent.get(query);
             Document doc = null;
@@ -119,18 +115,28 @@ public class WebCrawler {
             }
             
             cal.add(Calendar.DAY_OF_MONTH, 1);
+
+            System.out.println(" " + (listOfLinks.size() - numberArticles) + "articles found.");
+            numberArticles = listOfLinks.size();
         }
+
+        BufferedWriter w = new BufferedWriter(new FileWriter("../../logs/results.txt"));
 
         for(String link:listOfLinks)
         {
-            System.out.println(link);
+            w.write(link.toString()); w.newLine();
         }
+
+        w.close();
+
+        System.out.println("===========================================================");
+        System.out.println("Totally " + listOfLinks.size() + " articles found over " + Integer.parseInt(arguments[4]) + " days.");
         
         
     }
 
 
-    public static void inspectAllLinks(Document doc)
+    public void inspectAllLinks(Document doc)
     {
         
         Elements links = doc.getElementsByTag("a");
@@ -190,7 +196,7 @@ public class WebCrawler {
         }
     }
 
-    private static Document getPage(Document doc, String webQuery)
+    private Document getPage(Document doc, String webQuery)
     {
         for(int tryCount = 0; tryCount < maxTrials; tryCount++)
         {

@@ -8,6 +8,8 @@ public class Cleaner{
 
 	Cleaner() {}
 
+	/* function 'deleteFilesfromFolder' : deletes all files (excluding any subfolders) in 'nameFolder' */
+	/* param 'nameFolder' : folder, one level up, from which all files will be deleted.  */
 	public void deleteFilesFromFolder(String nameFolder) {
 
 		ArrayList<String> ListFiles = getFiles(new File("../"+nameFolder));
