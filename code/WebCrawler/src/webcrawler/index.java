@@ -13,8 +13,8 @@ public class index {
 		ocleaner.deleteFilesFromFolder("../files");
 		// // ocleaner.deleteFilesFromFolder("../logs");
 
-		// Analyser oanalyser = new Analyser(); 
-		// oanalyser.run();
+		Analyser oanalyser = new Analyser(); 
+		oanalyser.run();
 
 		WebCrawler ocrawler = new WebCrawler();
 
